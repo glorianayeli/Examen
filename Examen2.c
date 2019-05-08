@@ -54,10 +54,13 @@ void main()
             }
             numero[0]=buffer[indicador_numero];
             entero=atof(numero);
-            if(contador>=1)
+            for(int repeticiones=entero;repeticiones>=1;repeticiones++)
             {
-            
-         }
+               if(contador>=1)
+               {
+                  printf(palabra);
+               }
+            }
    }
 
 }
