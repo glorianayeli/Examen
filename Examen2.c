@@ -6,12 +6,14 @@
 #fuses NOPBADEN, NOMCLR, STVREN, NOLVP, NODEBUG
 #use delay(clock=16000000)
 
-int contador=0, entero=0;
+int contador=0, entero=0, flagTimer=0;
 #int_timer0
 void timer_0()
 {
+   flagTimer=1;
+   output_d(0x01);
    contador++;
-   set_timer0(127);
+   set_timer0(126);
 }
 void main()
 {
@@ -20,11 +22,12 @@ void main()
    char palabra[11]={""};
    int indicador_numero=0;
    set_tris_c(0x80); 
+   set_tris_d(0x01);
    //habilito mi interrupcion
    enable_interrupts(INT_RDA);
    enable_interrupts(GLOBAL);
    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256|RTCC_8_BIT);//sino se agrega la linea RTCC_8_BIT TRABAJA A 16BITS
-   set_timer0(127);
+   set_timer0(126);
    enable_interrupts(int_timer0);
    enable_interrupts(global);
    printf("\nIngresar 3 a 10 caracteres un espacio y 3 numeros"); 
@@ -54,12 +57,16 @@ void main()
             }
             numero[0]=buffer[indicador_numero];
             entero=atof(numero);
-            for(int repeticiones=entero;repeticiones>=1;repeticiones++)
+            if(flagTimer=1)
             {
-               if(contador>=1)
+               for(int repeticiones=entero;repeticiones>=1;repeticiones++)
                {
-                  printf(palabra);
+                  if(contador>=1)
+                  {
+                     printf(palabra);
+                  }
                }
+               flagTimer=0;
             }
    }
 
